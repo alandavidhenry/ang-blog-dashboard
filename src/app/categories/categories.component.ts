@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CategoriesService } from '../services/categories.service';
 import { Category } from '../models/category';
 
@@ -7,9 +7,21 @@ import { Category } from '../models/category';
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.css']
 })
-export class CategoriesComponent {
+export class CategoriesComponent implements OnInit {
+
+  categoryArray: Array<any>;
+  formCategory: string;
+  formStatus: string = 'Add';
+  categoryID: string;
 
   constructor(private categoryService: CategoriesService) {}
+
+  ngOnInit(): void {
+    this.categoryService.loadData().subscribe(val => {
+      console.log(val);
+      this.categoryArray = val;
+    })
+  }
 
   onSubmit(formData) {
 
@@ -17,7 +29,15 @@ export class CategoriesComponent {
       category: formData.value.category
     }
 
-    this.categoryService.saveData(categoryData);
+    if(this.formStatus == 'Add') {
+      this.categoryService.saveData(categoryData);
+      formData.reset();
+    }
+    else if( this.formStatus == 'Edit') {
+      this.categoryService.updateData(this.categoryID, categoryData);
+      formData.reset();
+      this.formStatus = 'Add';
+    }
 
     // Old Firestore
     // this.firestore.collection('categories').add(categoryData)
@@ -37,5 +57,15 @@ export class CategoriesComponent {
     //   .catch((err) => {
     //     console.log(err);
     //   })
+  }
+
+  onEdit(category, id) {
+    this.formCategory = category;
+    this.formStatus = 'Edit';
+    this.categoryID = id;
+  }
+
+  onDelete(id) {
+    this.categoryService.deleteData(id);
   }
 }
