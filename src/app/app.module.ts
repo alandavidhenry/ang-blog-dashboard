@@ -19,7 +19,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 // Old Firestore
 import { environment } from 'src/environments/environment';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { AngularFireModule } from "@angular/fire/compat";
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
 // Components
 import { AppComponent } from './app.component';
@@ -48,6 +49,7 @@ import { NewPostComponent } from './posts/new-post/new-post.component';
     AngularFirestoreModule,
     // provideFirebaseApp(() => initializeApp(environment.firebase)),
     // provideFirestore(() => getFirestore()),
+    AngularFireStorageModule,
     BrowserAnimationsModule,
     HttpClientModule,
     ReactiveFormsModule,
